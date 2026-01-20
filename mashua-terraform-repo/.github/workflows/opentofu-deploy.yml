@@ -1,0 +1,22 @@
+name: Deploy infrastructure in specific environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_environment:
+        description: "Select the environment to deploy to"
+        required: true
+        type: environment
+        default: 'staging'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-env:
+    name: Deploy environment
+    uses: ./.github/workflows/template-opentofu-plan-apply.yml
+    with:
+      deployment_environment: ${{ inputs.deployment_environment }}
+      opentofu_version: "1.11.0"
